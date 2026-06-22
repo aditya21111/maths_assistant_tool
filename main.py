@@ -109,7 +109,10 @@ if prompt:
             for msg in recent_messages
         ]
 
-
+        if st.sidebar.button('Test trace'):
+            result=agent.invoke(     {
+            "messages":clean_history }
+    )
         with st.status("Solving...", expanded=True) as status:
 
             def generate():
@@ -134,5 +137,7 @@ if prompt:
                     "content": final_response
                 }
             )
+
+   
 
 

@@ -16,7 +16,7 @@ os.environ['LANGSMITH_TRACING']='true'
 os.environ['LANGSMITH_PROJECT']=os.getenv('LANGSMITH_PROJECT')
 os.environ['LANGCHAIN_API_KEY']=os.getenv('LANGCHAIN_API_KEY')
 os.environ['OPENAI_API_KEY']=os.getenv('OPENAI_API_KEY')
-os.environ['LANGSMITH_ENDPOINT']=os.getenv('LANGSMITH_ENDPOINT')
+
 
 
 

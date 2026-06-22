@@ -1,3 +1,19 @@
+from dotenv import load_dotenv
+load_dotenv()
+import os 
+os.environ['GOOGLE_API_KEY']=os.getenv('GOOGLE_API_KEY')
+os.environ['LANGSMITH_TRACING']='true'
+os.environ['LANGSMITH_PROJECT']=os.getenv('LANGSMITH_PROJECT')
+os.environ['LANGCHAIN_API_KEY']=os.getenv('LANGCHAIN_API_KEY')
+os.environ['OPENAI_API_KEY']=os.getenv('OPENAI_API_KEY')
+os.environ['LANGSMITH_ENDPOINT']='https://api.smith.langchain.com'
+
+
+
+
+
+
+
 from math_tools import calculator,solve_one_variable_equations,solve_multi_variable_equations,differentiate_expression,integration_nonnumeric,solve_limits,find_series_expansion
 
 from langchain.agents import create_agent
@@ -7,16 +23,6 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 import streamlit as st
 import uuid
-from dotenv import load_dotenv
-load_dotenv()
-
-import os 
-os.environ['GOOGLE_API_KEY']=os.getenv('GOOGLE_API_KEY')
-os.environ['LANGSMITH_TRACING']='true'
-os.environ['LANGSMITH_PROJECT']=os.getenv('LANGSMITH_PROJECT')
-os.environ['LANGSMITH_API_KEY']=os.getenv('LANGSMITH_API_KEY')
-os.environ['OPENAI_API_KEY']=os.getenv('OPENAI_API_KEY')
-os.environ['LANGSMITH_ENDPOINT']='https://api.smith.langchain.com'
 
 
 

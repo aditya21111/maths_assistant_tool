@@ -4,8 +4,15 @@ import os
 
 
 #for tracing
-os.environ['LANGCHAIN_API_KEY']=os.getenv('LANGCHAIN_API_KEY')
+os.environ['LANGSMITH_API_KEY']=os.getenv('LANGSMITH_API_KEY')
 os.environ['LANGSMITH_TRACING']='true'
+os.environ['LANGSMITH_PROJECT']=os.getenv('LANGSMITH_PROJECT')
+
+st.write({
+    "LANGSMITH_TRACING": os.getenv("LANGSMITH_TRACING"),
+    "LANGSMITH_PROJECT": os.getenv("LANGSMITH_PROJECT"),
+    "LANGSMITH_API_KEY_EXISTS": bool(os.getenv("LANGSMITH_API_KEY"))
+})
 
 os.environ['GOOGLE_API_KEY']=os.getenv('GOOGLE_API_KEY')
 os.environ['OPENAI_API_KEY']=os.getenv('OPENAI_API_KEY')

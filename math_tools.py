@@ -52,7 +52,7 @@ def calculator(expression:str)->str:
         return str(
             numexpr.evaluate(
                     expression.strip(),
-                            global_dict={},  # restrict access to globals
+                            global_dict={},  
                             local_dict=local_dict,  # add common mathematical functions
                         )
                 )
@@ -269,13 +269,12 @@ def solve_one_variable_equations(sympy_equation:str)->str:
 
     var = list(variables)[0]
 
-    # Wider range of guesses to catch roots outside [-1, 1]
+    # Wider range of guesses 
     guesses = [0.0, 1.0, -1.0, 0.5, -0.5, 2.0, -2.0, 5.0, -5.0, 10.0, -10.0]
 
     for guess in guesses:
         try:
-            # Pass symbol and guess as SCALARS, not lists.
-            # nsolve([x], [0.5]) returns a Matrix; nsolve(x, 0.5) returns a Float.
+       
             num_sol = sympy.nsolve(expr, var, guess)
             formatted_sol = {str(var): float(num_sol)}
             return f"Numerical solution: {formatted_sol}"
@@ -324,7 +323,7 @@ def solve_multi_variable_equations(sympy_equation:str)->str:
     if not parsed_expressions or not variables_in_eq:
         return "Error: no valid equations or variables found."
     num_vars = len(variables_in_eq)
-    # FIX 1: Wider range of guesses
+
     guesses = [
         [0.0] * num_vars, [1.0] * num_vars, [-1.0] * num_vars,
         [0.5] * num_vars, [-0.5] * num_vars,

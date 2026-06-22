@@ -2,7 +2,9 @@ from dotenv import load_dotenv
 load_dotenv()
 import os 
 
-os.environ['LANGSMITH_API_KEY']=os.getenv('LANGSMITH_API_KEY')
+
+#for tracing
+os.environ['LANGCHAIN_API_KEY']=os.getenv('LANGCHAIN_API_KEY')
 os.environ['LANGSMITH_TRACING']='true'
 
 os.environ['GOOGLE_API_KEY']=os.getenv('GOOGLE_API_KEY')

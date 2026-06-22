@@ -36,7 +36,13 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 import streamlit as st
 import uuid
 
+from langsmith import Client
 
+try:
+    client = Client()
+    st.write("Client created successfully")
+except Exception as e:
+    st.error(f"LangSmith Error: {e}")
 
 
 
@@ -109,10 +115,6 @@ if prompt:
             for msg in recent_messages
         ]
 
-        if st.sidebar.button('Test trace'):
-            result=agent.invoke(     {
-            "messages":clean_history }
-    )
         with st.status("Solving...", expanded=True) as status:
 
             def generate():

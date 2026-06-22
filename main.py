@@ -4,9 +4,10 @@ import os
 os.environ['GOOGLE_API_KEY']=os.getenv('GOOGLE_API_KEY')
 os.environ['LANGSMITH_TRACING']='true'
 os.environ['LANGSMITH_PROJECT']=os.getenv('LANGSMITH_PROJECT')
-os.environ['LANGCHAIN_API_KEY']=os.getenv('LANGCHAIN_API_KEY')
+os.environ['LANGSMITH_API_KEY']=os.getenv('LANGSMITH_API_KEY')
 os.environ['OPENAI_API_KEY']=os.getenv('OPENAI_API_KEY')
-os.environ['LANGSMITH_ENDPOINT']='https://api.smith.langchain.com'
+os.environ['LANGSMITH_WORKSPACE_ID']=os.getenv('LANGSMITH_WORKSPACE_ID')
+
 
 
 

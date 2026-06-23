@@ -1,5 +1,16 @@
-.venv
-pyproject.toml
-uv.lock
+# Environment
+.venv/
 .env
+
+# Python
+__pycache__/
+*.pyc
+
+# uv
+uv.lock
+
+# Evaluation results
+*.csv
+
+# Scratch
 test.py

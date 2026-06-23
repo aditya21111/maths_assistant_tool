@@ -1,18 +1,14 @@
 # Math Assistant — AI-Powered Math Problem Solver
 
-An LLM-powered math assistant built with **LangChain Agents**, **Streamlit**, and **SymPy**. It converts natural-language math questions into tool calls, solves them symbolically/numerically, and streams the answer back — no manual formula entry needed.
+LLM-powered math assistant built with **LangChain Agents**, **Streamlit**, and **SymPy**. Converts natural-language math questions into tool calls, solves them symbolically/numerically, and streams the answer back.
 
-## What It Does
-
-Ask a math question in plain English (or LaTeX, or messy shorthand like `3x^2+5x+2=0`) and the agent picks the right tool, computes the answer, and explains the steps.
-
-**Supported problem types:**
+## Supported Problem Types
 
 | Category | Examples |
 |----------|---------|
 | Arithmetic | `what is 55!`, `sqrt(16) + 3` |
 | Trigonometry | `value of sin90 deg`, `cos(pi/4)` |
-| Single-variable equations | `solve 3x² + 5x + 2 = 0`, transcendental equations like `x² + sin(x) = 1` |
+| Single-variable equations | `solve 3x² + 5x + 2 = 0`, `x² + sin(x) = 1` |
 | Systems of equations | `solve 2x - y + z = 3, x + y + z = 6` |
 | Differentiation | `d/dx of x³·sin(x)`, higher-order & partial derivatives |
 | Integration | Indefinite, definite, and multi-variable integrals |
@@ -25,51 +21,47 @@ All tools live in [`math_tools.py`](math_tools.py):
 
 | Tool | Engine | Purpose |
 |------|--------|---------|
-| `calculator` | numexpr | Fast numeric evaluation of arithmetic expressions |
-| `solve_one_variable_equations` | sympy.solve + nsolve fallback | Polynomial & transcendental single-variable equations |
-| `solve_multi_variable_equations` | sympy.solve + nsolve fallback | Systems of equations |
-| `differentiate_expression` | sympy.diff | Derivatives of any order, including partial |
-| `integration_nonnumeric` | sympy.integrate | Indefinite, definite, and iterated integrals |
+| `calculator` | numexpr | Arithmetic evaluation |
+| `solve_one_variable_equations` | sympy.solve + nsolve | Single-variable equations |
+| `solve_multi_variable_equations` | sympy.solve + nsolve | Systems of equations |
+| `differentiate_expression` | sympy.diff | Derivatives (any order, partial) |
+| `integration_nonnumeric` | sympy.integrate | Indefinite, definite, iterated integrals |
 | `solve_limits` | sympy.limit | Limits including one-sided (±) |
-| `find_series_expansion` | sympy.series | Taylor/Maclaurin series expansion |
+| `find_series_expansion` | sympy.series | Taylor/Maclaurin expansion |
 
 ## Tech Stack
 
-- **LLM**: Google Gemma 4 31B (via `langchain-google-genai`)
-- **Agent framework**: LangChain `create_agent` (LangGraph-based)
+- **LLM**: Google Gemma 4 31B (`langchain-google-genai`)
+- **Agent**: LangChain `create_agent` (LangGraph-based)
 - **Symbolic math**: SymPy
-- **Numeric evaluation**: numexpr + NumPy
+- **Numeric**: numexpr + NumPy
 - **UI**: Streamlit
 - **Tracing & Evaluation**: LangSmith
 
 ## Setup
 
-**Prerequisites:** Python ≥ 3.11, [uv](https://docs.astral.sh/uv/) (recommended) or pip.
+**Prerequisites:** Python ≥ 3.11, [uv](https://docs.astral.sh/uv/) or pip.
 
 ```bash
-# Clone
 git clone <repo-url>
 cd text-to-math
 
-# Install dependencies (pick one)
-uv sync              # using uv (recommended)
-pip install -r requirements.txt   # using pip
+# Install (pick one)
+uv sync
+pip install -r requirements.txt
 
-# Create .env
+# Configure
 cp .env.example .env
-# Fill in:
-#   GOOGLE_API_KEY=...
-#   LANGSMITH_API_KEY=...      (optional, for tracing)
-#   LANGSMITH_PROJECT=...      (optional)
 ```
 
-### Required environment variables
+### Environment variables
 
 | Variable | Required | Purpose |
 |----------|:--------:|---------|
 | `GOOGLE_API_KEY` | ✅ | Gemma model access |
-| `LANGSMITH_API_KEY` | optional | LangSmith tracing |
-| `LANGSMITH_PROJECT` | optional | LangSmith project name |
+| `LANGSMITH_API_KEY` | optional | LangSmith tracing & evaluation |
+| `LANGSMITH_TRACING` | optional | Set to `true` to activate tracing (auto-set in code) |
+| `LANGSMITH_PROJECT` | optional | Project name for grouping traces |
 
 ## Run
 
@@ -77,33 +69,46 @@ cp .env.example .env
 streamlit run main.py
 ```
 
-The sidebar lets you enter your own Google API key. If left blank or invalid, the app falls back to the dev key from `.env`.
+## LangSmith Tracing
+
+When `LANGSMITH_API_KEY` is set in `.env`, every chat interaction is automatically traced — agent reasoning, tool calls, and latency are all logged to your [LangSmith](https://smith.langchain.com/) dashboard.
 
 ## Evaluation
 
-Click **"Run experiments"** in the sidebar to evaluate the agent against a LangSmith dataset (`jee_math_hard_30`). Results can be downloaded as CSV.
+Click **"Run experiments"** in the sidebar to evaluate against a LangSmith dataset. Results download as CSV.
+
+**Using your own dataset:**
+
+1. Create a dataset on [smith.langchain.com](https://smith.langchain.com/) with `question` and `output` fields.
+2. Replace the dataset name in `main.py`:
+   ```python
+   evaluation_result = evaluate(
+       agent_predict,
+       data='jee_math_hard_30',  # ← your dataset name
+   )
+   ```
 
 ## Project Structure
 
 ```
 text-to-math/
-├── main.py              # Streamlit app + agent setup + evaluation
-├── math_tools.py        # All 7 math tools (calculator, solvers, calculus)
+├── main.py              # Streamlit app + agent + evaluation
+├── math_tools.py        # All 7 math tools
 ├── experiments.ipynb     # Development notebook
-├── requirements.txt      # Pinned dependencies (auto-generated by uv)
-├── pyproject.toml        # Project metadata & top-level dependencies
+├── requirements.txt      # Pinned dependencies
+├── pyproject.toml        # Project metadata & dependencies
 └── .env                  # API keys (not committed)
 ```
 
 ## Roadmap — Upcoming Tools
 
-| Tool | What it will solve | Status |
-|------|-------------------|:------:|
-| `matrix_tool` | Determinants, inverse, rank, eigenvalues, adjoint, Ax=b | 🔜 Planned |
-| `vector_3d_tool` | Dot/cross product, projections, angle between vectors, planes & lines in 3D | 🔜 Planned |
-| `combinatorics_tool` | Permutations, combinations, binomial expansion, general term | 📋 Planned |
-| `probability_tool` | Bayes' theorem, conditional probability, binomial distribution | 📋 Planned |
-| `coordinate_geometry_tool` | Conic section properties (focus, eccentricity, directrix), tangent/normal to conics | 📋 Planned |
+| Tool | Coverage | Status |
+|------|----------|:------:|
+| `matrix_tool` | Determinants, inverse, rank, eigenvalues, Ax=b | 🔜 |
+| `vector_3d_tool` | Dot/cross product, projections, planes & lines in 3D | 🔜 |
+| `combinatorics_tool` | Permutations, combinations, binomial expansion | 📋 |
+| `probability_tool` | Bayes' theorem, conditional probability, distributions | 📋 |
+| `coordinate_geometry_tool` | Conic properties, tangent/normal to conics | 📋 |
 
 ## License
 
